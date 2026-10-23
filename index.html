@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BozoriTJ — Бозори онлайн</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+    }
+    header {
+      background: #087f5b;
+      color: white;
+      padding: 22px 15px;
+      text-align: center;
+    }
+    header h1 { margin: 0 0 8px; }
+    .search {
+      display: block;
+      width: 85%;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    h2 { text-align: center; }
+    #products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 15px;
+      padding: 15px;
+    }
+    .product {
+      background: white;
+      border-radius: 10px;
+      padding: 18px 12px;
+      box-shadow: 0 2px 8px #0001;
+    }
+    .product h3 { margin-top: 0; }
+    .price { color: #087f5b; font-weight: bold; }
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>BozoriTJ</h1>
+    <p>Бозори онлайни Тоҷикистон</p>
+  </header>
+
+  <input
+    class="search"
+    id="search"
+    placeholder="Ҷустуҷӯи маҳсулот..."
+    oninput="showProducts()"
+  >
+
+  <h2>Маҳсулот</h2>
+  <div id="products"></div>
+
+  <footer>BozoriTJ © 2026</footer>
+
+  <script>
+    const products = [
+      {
+        name: "Футболка",
+        price: 100,
+        category: "Либос"
+      }
+    ];
+
+    function showProducts() {
+      const query = document.getElementById("search")
+        .value.toLowerCase();
+
+      const list = products.filter(p =>
+        p.name.toLowerCase().includes(query) ||
+        p.category.toLowerCase().includes(query)
+      );
+
+      document.getElementById("products").innerHTML =
+        list.map(p => `
+          <div class="product">
+            <h3>${p.name}</h3>
+            <p>${p.category}</p>
+            <p class="price">${p.price} сомонӣ</p>
+          </div>
+        `).join("") ||
+        "<p>Маҳсулот ёфт нашуд.</p>";
+    }
+
+    showProducts();
+  </script>
+</body>
+</html>
