@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#116b45">
   <title>BozoriTJ — Бозори Тоҷикистон</title>
-  <meta name="description" content="BozoriTJ — бозори хариду фурӯши маҳсулот.">
 
   <style>
     * {
@@ -14,70 +14,78 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f6f5;
+      background: #f4f7f5;
       color: #222;
     }
 
     header {
-      background: #087f5b;
+      background: #116b45;
       color: white;
-      padding: 24px 12px;
+      padding: 22px 16px;
       text-align: center;
     }
 
     header h1 {
       margin: 0 0 8px;
-      font-size: 32px;
+      font-size: 30px;
     }
 
     header p {
       margin: 0;
     }
 
-    .search,
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px 14px;
+    }
+
+    .panel {
+      background: white;
+      padding: 18px;
+      margin-bottom: 22px;
+      border-radius: 12px;
+      box-shadow: 0 2px 9px #0000000d;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #116b45;
+    }
+
     input,
     textarea,
-    select {
+    select,
+    button {
       width: 100%;
       padding: 12px;
       margin: 7px 0;
-      border: 1px solid #ddd;
       border-radius: 7px;
-      font-size: 16px;
+      font: inherit;
     }
 
-    .search {
-      display: block;
-      width: 90%;
-      max-width: 600px;
-      margin: 20px auto;
+    input,
+    textarea,
+    select {
+      border: 1px solid #ccc;
       background: white;
     }
 
-    main {
-      max-width: 1000px;
-      margin: auto;
-      padding: 15px;
-    }
-
-    .panel,
-    .product {
-      background: white;
-      padding: 16px;
-      margin-bottom: 16px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px #0001;
+    textarea {
+      min-height: 85px;
+      resize: vertical;
     }
 
     button {
-      background: #087f5b;
+      border: none;
+      background: #116b45;
       color: white;
-      border: 0;
-      border-radius: 7px;
-      padding: 12px 16px;
-      margin: 5px 0;
       cursor: pointer;
-      font-size: 15px;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #0b5033;
     }
 
     button:disabled {
@@ -85,44 +93,138 @@
       cursor: wait;
     }
 
-    .secondary {
+    .secondary-button {
       background: #555;
+    }
+
+    .delete-button {
+      background: #b42318;
+    }
+
+    .delete-button:hover {
+      background: #8e1c13;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .status {
+      margin: 10px 0;
+      overflow-wrap: anywhere;
+    }
+
+    .error {
+      color: #b42318;
+    }
+
+    .success {
+      color: #116b45;
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .top-row h2 {
+      margin-bottom: 0;
+    }
+
+    .top-row button {
+      width: auto;
     }
 
     #products {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .product {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e4e8e5;
+      padding-bottom: 12px;
     }
 
     .product img {
       width: 100%;
-      height: 170px;
-      object-fit: contain;
-      border-radius: 7px;
-      background: #f8f8f8;
+      height: 190px;
+      object-fit: cover;
+      display: block;
+      background: #eee;
+    }
+
+    .product h3,
+    .product p {
+      margin: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .product h3 {
+      font-size: 19px;
     }
 
     .price {
-      color: #087f5b;
+      color: #116b45;
+      font-size: 21px;
       font-weight: bold;
-      font-size: 18px;
     }
 
-    #status {
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      padding: 8px 0;
+    .product .delete-button {
+      width: calc(100% - 24px);
+      margin: 0 12px;
     }
 
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 22px 12px;
       color: #666;
     }
 
-    [hidden] {
-      display: none !important;
+    @media (max-width: 500px) {
+      header h1 {
+        font-size: 25px;
+      }
+
+      main {
+        padding: 12px 9px;
+      }
+
+      .panel {
+        padding: 14px;
+      }
+
+      #products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .product img {
+        height: 135px;
+      }
+
+      .product h3 {
+        font-size: 16px;
+      }
+
+      .product p {
+        font-size: 14px;
+        margin: 9px;
+      }
+
+      .product .delete-button {
+        width: calc(100% - 18px);
+        margin: 0 9px;
+        padding: 9px 5px;
+        font-size: 12px;
+      }
     }
   </style>
 </head>
@@ -130,104 +232,122 @@
 <body>
   <header>
     <h1>BozoriTJ</h1>
-    <p>Бозори Тоҷикистон — хариду фурӯши маҳсулот</p>
+    <p>Бозори онлайн — маҳсулоти худро пайдо кунед</p>
   </header>
-
-  <input
-    id="search"
-    class="search"
-    type="search"
-    placeholder="Маҳсулотро ҷустуҷӯ кун..."
-    aria-label="Ҷустуҷӯи маҳсулот"
-  >
 
   <main>
     <section class="panel">
-      <h2>Маҳсулот</h2>
-      <div id="products">Маҳсулот бор шуда истодааст...</div>
+      <label for="search"><strong>Ҷустуҷӯи маҳсулот</strong></label>
+      <input
+        id="search"
+        type="search"
+        placeholder="Номи маҳсулот ё категория..."
+      >
     </section>
 
     <section class="panel">
+      <div class="top-row">
+        <h2>Маҳсулот</h2>
+        <button id="refreshButton" type="button">
+          Навсозӣ
+        </button>
+      </div>
+
+      <p id="productsStatus" class="status" aria-live="polite">
+        Маҳсулот бор шуда истодааст...
+      </p>
+
+      <div id="products"></div>
+    </section>
+
+    <section class="panel" id="loginPanel">
       <h2>Воридшавии администратор</h2>
-      <p>Барои илова кардани маҳсулот ба ҳисоби администратор ворид шав.</p>
 
       <form id="loginForm">
         <label for="email">Почтаи электронӣ</label>
         <input
           id="email"
           type="email"
+          placeholder="Почтаи электронии шумо"
           autocomplete="username"
           required
-          placeholder="Почтаи электронӣ"
         >
 
-        <label for="password">Рамз</label>
+        <label for="password">Парол</label>
         <input
           id="password"
           type="password"
+          placeholder="Паролро ворид кунед"
           autocomplete="current-password"
           required
-          placeholder="Рамз"
         >
 
-        <button id="loginBtn" type="submit">Ворид шудан</button>
+        <button id="loginButton" type="submit">
+          Ворид шудан
+        </button>
       </form>
 
-      <button id="logoutBtn" class="secondary" type="button" hidden>
-        Баромадан
-      </button>
-
-      <p id="loginState">Ҳисоб санҷида мешавад...</p>
+      <p id="loginStatus" class="status" aria-live="polite"></p>
     </section>
 
-    <section id="adminPanel" class="panel" hidden>
-      <h2>Илова кардани маҳсулот</h2>
+    <section class="panel hidden" id="adminPanel">
+      <div class="top-row">
+        <h2>Идоракунии маҳсулот</h2>
+        <button id="logoutButton" class="secondary-button" type="button">
+          Баромадан
+        </button>
+      </div>
+
+      <p id="adminStatus" class="status" aria-live="polite"></p>
+
+      <h3>Илова кардани маҳсулоти нав</h3>
 
       <form id="productForm">
-        <label for="name">Номи маҳсулот *</label>
+        <label for="productName">Номи маҳсулот *</label>
         <input
-          id="name"
-          required
+          id="productName"
+          type="text"
           maxlength="150"
-          placeholder="Масалан: Футболка"
+          placeholder="Масалан: Себ"
+          required
         >
 
-        <label for="description">Тавсифи маҳсулот</label>
+        <label for="productDescription">Тавсифи маҳсулот</label>
         <textarea
-          id="description"
-          rows="3"
+          id="productDescription"
           maxlength="3000"
           placeholder="Маълумот дар бораи маҳсулот"
         ></textarea>
 
-        <label for="price">Нарх (евро) *</label>
+        <label for="productPrice">Нарх бо евро (€) *</label>
         <input
-          id="price"
+          id="productPrice"
           type="number"
           min="0"
           step="0.01"
+          placeholder="10.00"
           required
-          placeholder="Масалан: 15"
         >
 
-        <label for="category">Категория *</label>
+        <label for="productCategory">Категория *</label>
         <input
-          id="category"
-          required
+          id="productCategory"
+          type="text"
           maxlength="100"
-          placeholder="Масалан: Либос"
+          placeholder="Масалан: Мева"
+          required
         >
 
-        <label for="image_url">Суроғаи акси маҳсулот</label>
+        <label for="productImage">Суроғаи сурат (URL)</label>
         <input
-          id="image_url"
+          id="productImage"
           type="url"
-          placeholder="https://..."
+          placeholder="https://example.com/image.jpg"
         >
 
-        <label for="stock">Миқдор *</label>
+        <label for="productStock">Миқдор *</label>
         <input
-          id="stock"
+          id="productStock"
           type="number"
           min="0"
           step="1"
@@ -235,49 +355,38 @@
           required
         >
 
-        <button id="addProductBtn" type="submit">
+        <button id="addProductButton" type="submit">
           Илова кардани маҳсулот
         </button>
       </form>
     </section>
-
-    <p id="status" role="status" aria-live="polite"></p>
   </main>
 
   <footer>
-    © 2026 BozoriTJ — Бозори Тоҷикистон
+    <p>© BozoriTJ — Бозори онлайн</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
+    "use strict";
+
     const SUPABASE_URL =
       "https://ljidohteqippikkuycfk.supabase.co";
 
     const SUPABASE_KEY =
       "sb_publishable_6xy2FHR3KwMEpFrmbi7nIQ_UMz97rIC";
 
-    const ADMIN_EMAIL = "firuzhamidov2006@gmail.com";
+    const ADMIN_EMAIL =
+      "firuzhamidov2006@gmail.com";
 
-    const db = window.supabase.createClient(
+    const supabaseClient = window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_KEY
     );
 
-    const loginForm = document.getElementById("loginForm");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const productForm = document.getElementById("productForm");
-    const adminPanel = document.getElementById("adminPanel");
-    const loginState = document.getElementById("loginState");
-    const statusElement = document.getElementById("status");
-    const loginBtn = document.getElementById("loginBtn");
-    const addProductBtn = document.getElementById("addProductBtn");
-
     let allProducts = [];
-
-    function showStatus(message) {
-      statusElement.textContent = message;
-    }
+    let currentUser = null;
 
     function escapeHTML(value) {
       return String(value ?? "").replace(/[&<>"']/g, character => ({
@@ -290,7 +399,9 @@
     }
 
     function safeImageURL(value) {
-      if (!value) return "";
+      if (!value) {
+        return "";
+      }
 
       try {
         const url = new URL(value);
@@ -298,62 +409,75 @@
         if (url.protocol === "https:" || url.protocol === "http:") {
           return url.href;
         }
-      } catch (_) {}
+      } catch (error) {
+        return "";
+      }
 
       return "";
     }
 
-    async function updateLoginState() {
-      const { data, error } = await db.auth.getSession();
+    function setStatus(elementId, message, type = "") {
+      const element = document.getElementById(elementId);
 
-      if (error) {
-        loginState.textContent = "Хатои санҷиши ҳисоб.";
-        adminPanel.hidden = true;
-        logoutBtn.hidden = true;
-        loginForm.hidden = false;
-        return;
+      element.textContent = message;
+      element.className = "status";
+
+      if (type) {
+        element.classList.add(type);
       }
+    }
 
-      const user = data.session?.user;
+    function updateLoginState() {
+      const isAdmin = Boolean(
+        currentUser &&
+        currentUser.email &&
+        currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()
+      );
 
-      const isAdmin =
-        !!user &&
-        user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+      document.getElementById("loginPanel")
+        .classList.toggle("hidden", isAdmin);
 
-      loginState.textContent = isAdmin
-        ? "Ту ҳамчун администратор ворид шудӣ."
-        : user
-          ? "Ин ҳисоб ҳуқуқи администратор надорад."
-          : "Ба ҳисоб ворид нашудаӣ.";
+      document.getElementById("adminPanel")
+        .classList.toggle("hidden", !isAdmin);
 
-      adminPanel.hidden = !isAdmin;
-      logoutBtn.hidden = !user;
-      loginForm.hidden = !!user;
+      renderProducts();
     }
 
     async function loadProducts() {
+      const status = document.getElementById("productsStatus");
       const container = document.getElementById("products");
-      container.textContent = "Маҳсулот бор шуда истодааст...";
 
-      const { data, error } = await db
+      status.textContent = "Маҳсулот бор шуда истодааст...";
+
+      const { data, error } = await supabaseClient
         .from("products")
-        .select("id, name, description, price, category, image_url, stock")
+        .select("id, name, description, price, category, image_url, stock, is_active, created_at")
         .eq("is_active", true)
         .order("created_at", { ascending: false });
 
       if (error) {
-        container.textContent =
-          "Маҳсулот бор нашуд. Танзимоти Supabase-ро санҷ.";
-        showStatus("Хатои бор кардани маҳсулот: " + error.message);
+        console.error("Load products error:", error);
+        allProducts = [];
+        container.replaceChildren();
+
+        status.textContent =
+          "Маҳсулот бор нашуд. Танзимоти Supabase ва пайвасти интернетро санҷед.";
+
         return;
       }
 
       allProducts = data || [];
+
+      status.textContent = allProducts.length
+        ? "Ҳамагӣ " + allProducts.length + " маҳсулот."
+        : "Ҳоло маҳсулот нест.";
+
       renderProducts();
     }
 
     function renderProducts() {
       const container = document.getElementById("products");
+
       const searchTerm = document
         .getElementById("search")
         .value
@@ -370,156 +494,346 @@
         return text.includes(searchTerm);
       });
 
+      container.replaceChildren();
+
       if (filtered.length === 0) {
-        container.textContent = searchTerm
+        const message = document.createElement("p");
+
+        message.textContent = searchTerm
           ? "Маҳсулоти мувофиқ ёфт нашуд."
           : "Ҳоло маҳсулот нест.";
+
+        container.appendChild(message);
         return;
       }
 
-      container.innerHTML = filtered.map(product => {
-        const image = safeImageURL(product.image_url);
+      filtered.forEach(product => {
+        const card = document.createElement("article");
+        card.className = "product";
 
-        return `
-          <article class="product">
-            ${
-              image
-                ? `<img src="${escapeHTML(image)}"
-                     alt="${escapeHTML(product.name)}"
-                     loading="lazy">`
-                : ""
-            }
-            <h3>${escapeHTML(product.name)}</h3>
-            <p>${escapeHTML(product.description || "")}</p>
-            <p>Категория: ${escapeHTML(product.category)}</p>
-            <p class="price">${escapeHTML(product.price)} €</p>
-            <p>Миқдор: ${escapeHTML(product.stock)}</p>
-          </article>
-        `;
-      }).join("");
+        const imageURL = safeImageURL(product.image_url);
+
+        if (imageURL) {
+          const image = document.createElement("img");
+
+          image.src = imageURL;
+          image.alt = product.name || "Маҳсулот";
+          image.loading = "lazy";
+          image.referrerPolicy = "no-referrer";
+
+          image.addEventListener("error", () => {
+            image.remove();
+          });
+
+          card.appendChild(image);
+        }
+
+        const name = document.createElement("h3");
+        name.textContent = product.name || "Бе ном";
+        card.appendChild(name);
+
+        const description = document.createElement("p");
+        description.textContent = product.description || "";
+        card.appendChild(description);
+
+        const category = document.createElement("p");
+        category.textContent =
+          "Категория: " + (product.category || "Муайян нест");
+        card.appendChild(category);
+
+        const price = document.createElement("p");
+        price.className = "price";
+
+        const numericPrice = Number(product.price);
+
+        price.textContent = Number.isFinite(numericPrice)
+          ? numericPrice.toLocaleString("de-DE", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            }) + " €"
+          : "Нарх муайян нест";
+
+        card.appendChild(price);
+
+        const stock = document.createElement("p");
+        stock.textContent = "Миқдор: " + (product.stock ?? 0);
+        card.appendChild(stock);
+
+        const isAdmin = Boolean(
+          currentUser &&
+          currentUser.email &&
+          currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()
+        );
+
+        if (isAdmin) {
+          const deleteButton = document.createElement("button");
+
+          deleteButton.type = "button";
+          deleteButton.className = "delete-button";
+          deleteButton.textContent = "Нест кардани маҳсулот";
+
+          deleteButton.addEventListener("click", () => {
+            deleteProduct(product.id, product.name);
+          });
+
+          card.appendChild(deleteButton);
+        }
+
+        container.appendChild(card);
+      });
     }
 
-    loginForm.addEventListener("submit", async event => {
-      event.preventDefault();
-
-      showStatus("Ба ҳисоб ворид шуда истодаӣ...");
-      loginBtn.disabled = true;
-
-      try {
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-
-        const { error } = await db.auth.signInWithPassword({
-          email,
-          password
-        });
-
-        if (error) {
-          showStatus("Ворид нашуд: " + error.message);
-          return;
-        }
-
-        loginForm.reset();
-        await updateLoginState();
-        showStatus("Воридшавӣ бомуваффақият анҷом ёфт.");
-      } catch (error) {
-        showStatus("Хато ҳангоми воридшавӣ: " + error.message);
-      } finally {
-        loginBtn.disabled = false;
-      }
+    document.getElementById("search").addEventListener("input", () => {
+      renderProducts();
     });
 
-    logoutBtn.addEventListener("click", async () => {
-      const { error } = await db.auth.signOut();
+    document.getElementById("refreshButton").addEventListener("click", () => {
+      loadProducts();
+    });
 
-      showStatus(
-        error ? "Хато: " + error.message : "Аз ҳисоб баромадӣ."
+    document.getElementById("loginForm").addEventListener("submit", async event => {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const button = document.getElementById("loginButton");
+
+      if (email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+        setStatus(
+          "loginStatus",
+          "Ин почтаи электронӣ барои администратор иҷозат надорад.",
+          "error"
+        );
+        return;
+      }
+
+      button.disabled = true;
+      setStatus("loginStatus", "Ворид шуда истодаед...");
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      button.disabled = false;
+
+      if (error) {
+        console.error("Login error:", error);
+
+        setStatus(
+          "loginStatus",
+          "Воридшавӣ нашуд. Почтаи электронӣ ва паролро санҷед.",
+          "error"
+        );
+
+        return;
+      }
+
+      currentUser = data.user;
+
+      document.getElementById("loginForm").reset();
+
+      setStatus(
+        "adminStatus",
+        "Шумо ҳамчун администратор ворид шудед.",
+        "success"
       );
 
-      await updateLoginState();
+      setStatus("loginStatus", "");
+      updateLoginState();
     });
 
-    productForm.addEventListener("submit", async event => {
+    document.getElementById("logoutButton").addEventListener("click", async () => {
+      const { error } = await supabaseClient.auth.signOut();
+
+      if (error) {
+        console.error("Logout error:", error);
+
+        setStatus(
+          "adminStatus",
+          "Баромадан муваффақ нашуд. Аз нав кӯшиш кунед.",
+          "error"
+        );
+
+        return;
+      }
+
+      currentUser = null;
+      updateLoginState();
+
+      setStatus("loginStatus", "Шумо аз ҳисоб баромадед.", "success");
+      setStatus("adminStatus", "");
+    });
+
+    document.getElementById("productForm").addEventListener("submit", async event => {
       event.preventDefault();
 
-      showStatus("Маҳсулот илова шуда истодааст...");
-      addProductBtn.disabled = true;
-
-      try {
-        const { data: sessionData, error: sessionError } =
-          await db.auth.getSession();
-
-        if (sessionError) {
-          showStatus("Хатои санҷиши ҳисоб: " + sessionError.message);
-          return;
-        }
-
-        const user = sessionData.session?.user;
-
-        if (
-          !user ||
-          user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()
-        ) {
-          showStatus("Аввал ҳамчун администратор ворид шав.");
-          return;
-        }
-
-        const product = {
-          name: document.getElementById("name").value.trim(),
-          description: document.getElementById("description").value.trim(),
-          price: Number(document.getElementById("price").value),
-          category: document.getElementById("category").value.trim(),
-          image_url:
-            document.getElementById("image_url").value.trim() || null,
-          stock: Number(document.getElementById("stock").value),
-          is_active: true
-        };
-
-        if (
-          !product.name ||
-          !product.category ||
-          !Number.isFinite(product.price) ||
-          product.price < 0 ||
-          !Number.isInteger(product.stock) ||
-          product.stock < 0
-        ) {
-          showStatus("Ном, категория, нарх ва миқдорро дуруст пур кун.");
-          return;
-        }
-
-        const { error } = await db
-          .from("products")
-          .insert(product);
-
-        if (error) {
-          showStatus("Маҳсулот илова нашуд: " + error.message);
-          return;
-        }
-
-        showStatus("Маҳсулот бомуваффақият илова шуд!");
-        productForm.reset();
-        document.getElementById("stock").value = "1";
-
-        await loadProducts();
-      } catch (error) {
-        showStatus("Хато ҳангоми илова кардани маҳсулот: " + error.message);
-      } finally {
-        addProductBtn.disabled = false;
+      if (
+        !currentUser ||
+        !currentUser.email ||
+        currentUser.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()
+      ) {
+        setStatus(
+          "adminStatus",
+          "Аввал ҳамчун администратор ворид шавед.",
+          "error"
+        );
+        return;
       }
+
+      const name = document.getElementById("productName").value.trim();
+      const description = document.getElementById("productDescription").value.trim();
+      const category = document.getElementById("productCategory").value.trim();
+      const imageInput = document.getElementById("productImage").value.trim();
+      const price = Number(document.getElementById("productPrice").value);
+      const stock = Number(document.getElementById("productStock").value);
+      const button = document.getElementById("addProductButton");
+
+      if (!name || !category) {
+        setStatus(
+          "adminStatus",
+          "Номи маҳсулот ва категорияро пур кунед.",
+          "error"
+        );
+        return;
+      }
+
+      if (
+        !Number.isFinite(price) ||
+        price < 0 ||
+        !Number.isFinite(stock) ||
+        stock < 0 ||
+        !Number.isInteger(stock)
+      ) {
+        setStatus(
+          "adminStatus",
+          "Нарх ё миқдор нодуруст аст.",
+          "error"
+        );
+        return;
+      }
+
+      let imageURL = null;
+
+      if (imageInput) {
+        imageURL = safeImageURL(imageInput);
+
+        if (!imageURL) {
+          setStatus(
+            "adminStatus",
+            "Суроғаи сурат бояд URL-и дурусти HTTP ё HTTPS бошад.",
+            "error"
+          );
+          return;
+        }
+      }
+
+      button.disabled = true;
+
+      setStatus("adminStatus", "Маҳсулот илова шуда истодааст...");
+
+      const { error } = await supabaseClient
+        .from("products")
+        .insert({
+          name,
+          description,
+          price,
+          category,
+          image_url: imageURL,
+          stock,
+          is_active: true
+        });
+
+      button.disabled = false;
+
+      if (error) {
+        console.error("Insert product error:", error);
+
+        setStatus(
+          "adminStatus",
+          "Маҳсулот илова нашуд. Иҷозатҳои RLS ва танзимоти Supabase-ро санҷед.",
+          "error"
+        );
+
+        return;
+      }
+
+      document.getElementById("productForm").reset();
+
+      setStatus(
+        "adminStatus",
+        "Маҳсулот бомуваффақият илова шуд.",
+        "success"
+      );
+
+      await loadProducts();
     });
 
-    document
-      .getElementById("search")
-      .addEventListener("input", renderProducts);
+    async function deleteProduct(id, name) {
+      const confirmed = window.confirm(
+        'Маҳсулоти "' + name + '" нест карда шавад?'
+      );
 
-    db.auth.onAuthStateChange(() => {
-      setTimeout(() => {
+      if (!confirmed) {
+        return;
+      }
+
+      setStatus("adminStatus", "Маҳсулот нест шуда истодааст...");
+
+      const { error } = await supabaseClient
+        .from("products")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        console.error("Delete product error:", error);
+
+        setStatus(
+          "adminStatus",
+          "Маҳсулот нест нашуд. Иҷозати DELETE дар Supabase-ро санҷед.",
+          "error"
+        );
+
+        return;
+      }
+
+      setStatus(
+        "adminStatus",
+        "Маҳсулот нест карда шуд.",
+        "success"
+      );
+
+      await loadProducts();
+    }
+
+    async function initializeApp() {
+      if (!window.supabase) {
+        setStatus(
+          "productsStatus",
+          "Supabase бор нашуд. Интернетро санҷед ва саҳифаро нав кунед.",
+          "error"
+        );
+        return;
+      }
+
+      const { data, error } = await supabaseClient.auth.getSession();
+
+      if (error) {
+        console.error("Session error:", error);
+      }
+
+      currentUser = data?.session?.user || null;
+
+      updateLoginState();
+      await loadProducts();
+
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        currentUser = session?.user || null;
         updateLoginState();
-      }, 0);
-    });
+      });
+    }
 
-    updateLoginState();
-    loadProducts();
+    initializeApp();
   </script>
 </body>
 </html>
