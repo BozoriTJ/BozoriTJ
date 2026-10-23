@@ -124,9 +124,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL =
-      "https://ljidohteqippikkuycfk.supabase.co";
-
-    // Калиди Publishable-и худро дар дохили нохунак гузор.
+      "https://ljidohteqippikkuycfk.supabase.co"
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_6xy2FHR3KwMEpFrmbi7nIQ_UMz97rIC";
 
     const ADMIN_EMAIL = "firuzhamidov2006@gmail.com";
