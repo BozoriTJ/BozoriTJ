@@ -1,103 +1,386 @@
+
 <!DOCTYPE html>
 <html lang="tg">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BozoriTJ — Бозори онлайн</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BozoriTJ — Расонидани хӯрок</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f6f8;
+      background: #f3f6f4;
       color: #222;
     }
     header {
       background: #087f5b;
       color: white;
-      padding: 22px 15px;
+      padding: 24px 12px;
       text-align: center;
     }
     header h1 { margin: 0 0 8px; }
-    .search {
-      display: block;
-      width: 85%;
-      max-width: 500px;
-      margin: 20px auto;
-      padding: 13px;
-      border: 1px solid #ddd;
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 14px;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    nav a {
+      color: #087f5b;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    main {
+      max-width: 950px;
+      padding: 16px;
+      margin: auto;
+    }
+    .panel, .product {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px #0000000b;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+    }
+    .emoji { font-size: 44px; }
+    .price { color: #087f5b; font-weight: bold; }
+    button {
+      background: #087f5b;
+      color: white;
+      border: 0;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button:disabled { opacity: .6; }
+    .remove { background: #b42318; padding: 7px 10px; }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 7px 0 14px;
+      border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 16px;
     }
-    h2 { text-align: center; }
-    #products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-      gap: 15px;
-      padding: 15px;
-    }
-    .product {
-      background: white;
-      border-radius: 10px;
-      padding: 18px 12px;
-      box-shadow: 0 2px 8px #0001;
-    }
-    .product h3 { margin-top: 0; }
-    .price { color: #087f5b; font-weight: bold; }
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #666;
-    }
+    label { font-weight: bold; }
+    #message { white-space: pre-wrap; overflow-wrap: anywhere; }
+    .success { color: #087f5b; }
+    .error { color: #b42318; }
+    footer { text-align: center; padding: 24px; color: #666; }
   </style>
 </head>
 <body>
   <header>
-    <h1>BozoriTJ</h1>
-    <p>Бозори онлайни Тоҷикистон</p>
+    <h1>🍽️ BozoriTJ</h1>
+    <p>Хӯрок фармоиш деҳ — ба хонаат расонем!</p>
   </header>
 
-  <input
-    class="search"
-    id="search"
-    placeholder="Ҷустуҷӯи маҳсулот..."
-    oninput="showProducts()"
-  >
+  <nav>
+    <a href="#menu">Меню</a>
+    <a href="#cart">Сабад</a>
+    <a href="#order">Фармоиш</a>
+  </nav>
 
-  <h2>Маҳсулот</h2>
-  <div id="products"></div>
+  <main>
+    <section class="panel">
+      <h2>Салом! 👋</h2>
+      <p>Хӯроки дӯстдоштаатро интихоб кун.</p>
+      <p id="connection">Пайвастшавӣ ба база санҷида мешавад...</p>
+    </section>
 
-  <footer>BozoriTJ © 2026</footer>
+    <h2 id="menu">🍕 Меню</h2>
+    <section class="products">
+      <article class="product">
+        <div class="emoji">🍕</div>
+        <h3>Питса</h3>
+        <p>Питсаи болаззат</p>
+        <p class="price">60 сомонӣ</p>
+        <button type="button" onclick="addItem('Питса',60)">Ба сабад</button>
+      </article>
 
+      <article class="product">
+        <div class="emoji">🍔</div>
+        <h3>Бургер</h3>
+        <p>Бургери гӯштӣ</p>
+        <p class="price">35 сомонӣ</p>
+        <button type="button" onclick="addItem('Бургер',35)">Ба сабад</button>
+      </article>
+
+      <article class="product">
+        <div class="emoji">🍗</div>
+        <h3>Мурғи бирён</h3>
+        <p>Мурғи бирён бо ҳанут</p>
+        <p class="price">45 сомонӣ</p>
+        <button type="button" onclick="addItem('Мурғи бирён',45)">Ба сабад</button>
+      </article>
+
+      <article class="product">
+        <div class="emoji">🥤</div>
+        <h3>Нӯшокӣ</h3>
+        <p>Нӯшокии хунук</p>
+        <p class="price">10 сомонӣ</p>
+        <button type="button" onclick="addItem('Нӯшокӣ',10)">Ба сабад</button>
+      </article>
+    </section>
+
+    <section class="panel" id="cart">
+      <h2>🛒 Сабади шумо</h2>
+      <div id="cart-items">Сабад холӣ аст.</div>
+      <h3>Ҳамагӣ: <span id="total">0</span> сомонӣ</h3>
+      <button class="remove" type="button" onclick="clearCart()">Холӣ кардани сабад</button>
+    </section>
+
+    <section class="panel" id="order">
+      <h2>📦 Фармоиш додан</h2>
+
+      <form id="order-form">
+        <label for="customer-name">Ному насаб</label>
+        <input id="customer-name" required maxlength="100"
+               autocomplete="name" placeholder="Номи шумо">
+
+        <label for="phone">Рақами телефон</label>
+        <input id="phone" type="tel" required maxlength="30"
+               autocomplete="tel" placeholder="+992...">
+
+        <label for="address">Суроғаи расонидан</label>
+        <textarea id="address" required maxlength="500"
+                  autocomplete="street-address"
+                  placeholder="Шаҳр, кӯча, хона"></textarea>
+
+        <label for="notes">Шарҳи иловагӣ</label>
+        <textarea id="notes" maxlength="1000"
+                  placeholder="Масалан: занг занед пеш аз расидан"></textarea>
+
+        <button id="submit-button" type="submit">Фиристодани фармоиш</button>
+      </form>
+
+      <p id="message" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <footer>© BozoriTJ</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const products = [
-      {
-        name: "Футболка",
-        price: 100,
-        category: "Либос"
+    const SUPABASE_URL = "https://ljidohteqippikkuycfk.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_6xy2FHR3KwMEpFrmbi7nIQ_UMz97rIC";
+
+    const db = window.supabase
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+      : null;
+
+    let cart = [];
+    let sending = false;
+
+    function addItem(name, price) {
+      const existing = cart.find(item => item.name === name);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ name, price, quantity: 1 });
       }
-    ];
 
-    function showProducts() {
-      const query = document.getElementById("search")
-        .value.toLowerCase();
-
-      const list = products.filter(p =>
-        p.name.toLowerCase().includes(query) ||
-        p.category.toLowerCase().includes(query)
-      );
-
-      document.getElementById("products").innerHTML =
-        list.map(p => `
-          <div class="product">
-            <h3>${p.name}</h3>
-            <p>${p.category}</p>
-            <p class="price">${p.price} сомонӣ</p>
-          </div>
-        `).join("") ||
-        "<p>Маҳсулот ёфт нашуд.</p>";
+      renderCart();
     }
 
-    showProducts();
+    function clearCart() {
+      cart = [];
+      renderCart();
+    }
+
+    function renderCart() {
+      const area = document.getElementById("cart-items");
+      area.replaceChildren();
+
+      if (cart.length === 0) {
+        area.textContent = "Сабад холӣ аст.";
+      }
+
+      cart.forEach((item, index) => {
+        const row = document.createElement("p");
+        row.append(
+          document.createTextNode(
+            `${item.name} × ${item.quantity} — ${item.price * item.quantity} сомонӣ `
+          )
+        );
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "remove";
+        remove.textContent = "Нест кардан";
+        remove.onclick = () => {
+          cart.splice(index, 1);
+          renderCart();
+        };
+
+        row.appendChild(remove);
+        area.appendChild(row);
+      });
+
+      const total = cart.reduce(
+        (sum, item) => sum + item.price * item.quantity, 0
+      );
+
+      document.getElementById("total").textContent = total;
+    }
+
+    function showMessage(text, type) {
+      const message = document.getElementById("message");
+      message.textContent = text;
+      message.className = type || "";
+    }
+
+    async function checkConnection() {
+      const status = document.getElementById("connection");
+
+      if (!db) {
+        status.textContent = "Хатогӣ: китобхонаи база бор нашуд.";
+        return;
+      }
+
+      try {
+        const { error } = await db
+          .from("delivery_orders")
+          .select("id")
+          .limit(1);
+
+        if (error) throw error;
+
+        status.textContent = "Пайвастшавӣ ба ҷадвали фармоиш дастрас аст.";
+      } catch (error) {
+        console.error("Connection check:", error);
+        status.textContent =
+          "Ҷадвал ё иҷозатҳои база бояд санҷида шаванд.";
+      }
+    }
+
+    document.getElementById("order-form").addEventListener(
+      "submit", async function(event) {
+        event.preventDefault();
+
+        if (sending) return;
+
+        if (!cart.length) {
+          showMessage("Аввал аз меню хӯрок интихоб кун.", "error");
+          return;
+        }
+
+        if (!db) {
+          showMessage("Пайвастшавӣ ба база дастрас нест.", "error");
+          return;
+        }
+
+        const customerName =
+          document.getElementById("customer-name").value.trim();
+        const phone =
+          document.getElementById("phone").value.trim();
+        const address =
+          document.getElementById("address").value.trim();
+        const notes =
+          document.getElementById("notes").value.trim();
+
+        if (!customerName || !phone || !address) {
+          showMessage("Лутфан ҳамаи маълумоти заруриро пур кун.", "error");
+          return;
+        }
+
+        const items = cart.map(item => ({ ...item }));
+        const total = items.reduce(
+          (sum, item) => sum + item.price * item.quantity, 0
+        );
+
+        sending = true;
+        const submitButton = document.getElementById("submit-button");
+        submitButton.disabled = true;
+        showMessage("Фармоиш фиристода мешавад...", "");
+
+        try {
+          /*
+           * Ин код талаб мекунад, ки delivery_orders чунин сутунҳо дошта бошад:
+           * customer_name, phone, delivery_address, notes,
+           * total_amount, status
+           *
+           * order_items бояд чунин сутунҳо дошта бошад:
+           * order_id, item_name, quantity, unit_price
+           */
+
+          const { data: order, error: orderError } = await db
+            .from("delivery_orders")
+            .insert({
+              customer_name: customerName,
+              phone: phone,
+              delivery_address: address,
+              notes: notes || null,
+              total_amount: total,
+              status: "pending"
+            })
+            .select("id")
+            .single();
+
+          if (orderError) throw orderError;
+
+          const orderItems = items.map(item => ({
+            order_id: order.id,
+            item_name: item.name,
+            quantity: item.quantity,
+            unit_price: item.price
+          }));
+
+          const { error: itemsError } = await db
+            .from("order_items")
+            .insert(orderItems);
+
+          if (itemsError) {
+            console.error("Order items error:", itemsError);
+            showMessage(
+              "Рақами фармоиш: " + order.id +
+              ". Фармоиш сохта шуд, вале сабти хӯрокҳо ноком шуд. " +
+              "Ба администратор муроҷиат кун.",
+              "error"
+            );
+            return;
+          }
+
+          showMessage(
+            "Фармоиши шумо дар система сабт шуд!\n" +
+            "Рақами фармоиш: " + order.id +
+            "\nҲамагӣ: " + total + " сомонӣ",
+            "success"
+          );
+
+          cart = [];
+          renderCart();
+          document.getElementById("order-form").reset();
+
+        } catch (error) {
+          console.error("Order submission error:", error);
+          showMessage(
+            "Фармоиш сабт нашуд. Сабаб метавонад сохтори ҷадвал " +
+            "ё иҷозатҳои RLS бошад. Хатогӣ: " +
+            (error.message || "номаълум"),
+            "error"
+          );
+        } finally {
+          sending = false;
+          submitButton.disabled = false;
+        }
+      }
+    );
+
+    renderCart();
+    checkConnection();
   </script>
 </body>
 </html>
