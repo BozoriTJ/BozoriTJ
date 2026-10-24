@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BozoriTJ Admin</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body{font-family:Arial,sans-serif;background:#f3f5f7;margin:0;padding:16px;color:#222}
+    main{max-width:900px;margin:auto}
+    .box,.order{background:white;padding:16px;margin:12px 0;border-radius:12px}
+    input,button,select{padding:12px;margin:5px 0;max-width:100%;box-sizing:border-box}
+    input{width:100%}
+    button{cursor:pointer;background:#087f5b;color:white;border:0;border-radius:7px}
+    .muted{color:#666;font-size:14px}
+    .error{color:#b00020}
+    .order{overflow-wrap:anywhere}
+  </style>
+</head>
+<body>
+<main>
+  <h2>BozoriTJ — Панели администратор</h2>
+
+  <section class="box" id="loginBox">
+    <h3>Воридшавӣ</h3>
+    <input id="email" type="email" placeholder="Email" autocomplete="username">
+    <input id="password" type="password" placeholder="Парол" autocomplete="current-password">
+    <button id="loginBtn">Ворид шудан</button>
+    <p id="loginMsg" class="error"></p>
+  </section>
+
+  <section id="dashboard" hidden>
+    <div class="box">
+      <span id="welcome"></span>
+      <button id="refreshBtn">Навсозии фармоишҳо</button>
+      <button id="logoutBtn">Баромадан</button>
+      <p id="message"></p>
+    </div>
+    <div id="orders"></div>
+  </section>
+</main>
+
+<script>
+const SUPABASE_URL = "https://ljidohteqippikkuycfk.supabase.co";
+const SUPABASE_KEY = "sb_publishable_6xy2FHR3KwMEpFrmbi7nIQ_UMz97rIC";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const statuses = [
+  ["new", "Нав"],
+  ["accepted", "Қабул шуд"],
+  ["preparing", "Тайёр карда мешавад"],
+  ["ready_for_pickup", "Барои гирифт гирифтан тайёр"],
+  ["picked_up", "Гирифта шуд"],
+  ["delivering", "Дар роҳ"],
+  ["delivered", "Расонида шуд"],
+  ["cancelled", "Бекор шуд"]
+];
+
+const $ = id => document.getElementById(id);
+let currentUser = null;
+
+function safe(value) {
+  const el = document.createElement("span");
+  el.textContent = value == null ? "" : String(value);
+  return el.innerHTML;
+}
+
+function money(value) {
+  return (Number(value) || 0).toLocaleString("ru-RU") + " сомонӣ";
+}
+
+async function checkAdmin() {
+  const {data, error} = await db.auth.getSession();
+  if (error) throw error;
+  if (!data.session) return false;
+
+  currentUser = data.session.user;
+
+  const {data: profile, error: profileError} = await db
+    .from("profiles")
+    .select("role")
+    .eq("id", currentUser.id)
+    .maybeSingle();
+
+  if (profileError) throw profileError;
+
+  if (!profile || profile.role !== "admin") {
+    throw new Error("Ин ҳисоб ҳуқуқи администратор надорад.");
+  }
+
+  $("loginBox").hidden = true;
+  $("dashboard").hidden = false;
+  $("welcome").textContent = "Ворид шудед: " + currentUser.email;
+  return true;
+}
+
+async function loadOrders() {
+  $("message").textContent = "Фармоишҳо бор шуда истодаанд...";
+  $("orders").replaceChildren();
+
+  try {
+    if (!await checkAdmin()) return;
+
+    const {data: orders, error} = await db
+      .from("delivery_orders")
+      .select("id, customer_name, customer_phone, phone, delivery_address, notes, subtotal, delivery_fee, total, total_amount, status, created_at, payment_method")
+      .order("created_at", {ascending: false})
+      .limit(100);
+
+    if (error) throw error;
+
+    if (!orders || orders.length === 0) {
+      $("message").textContent = "Ҳоло фармоиш нест.";
+      return;
+    }
+
+    $("message").textContent = "Фармоишҳо: " + orders.length;
+
+    for (const order of orders) {
+      const card = document.createElement("article");
+      card.className = "order";
+
+      const date = order.created_at
+        ? new Date(order.created_at).toLocaleString("tg-TJ")
+        : "";
+
+      const phone = order.customer_phone || order.phone || "Нест";
+      const total = order.total ?? order.total_amount ?? order.subtotal ?? 0;
+
+      card.innerHTML = `
+        <h3>Фармоиш</h3>
+        <p><b>Рақам:</b> ${safe(order.id)}</p>
+        <p><b>Мизоҷ:</b> ${safe(order.customer_name)}</p>
+        <p><b>Телефон:</b> ${safe(phone)}</p>
+        <p><b>Суроға:</b> ${safe(order.delivery_address)}</p>
+        <p><b>Эзоҳ:</b> ${safe(order.notes || "Нест")}</p>
+        <p><b>Маблағ:</b> ${safe(money(total))}</p>
+        <p><b>Пардохт:</b> ${safe(order.payment_method || "Нест")}</p>
+        <p><b>Сана:</b> ${safe(date)}</p>
+        <p><b>Ҳолат:</b> ${safe(order.status)}</p>
+        <label>Тағйир додани ҳолат:</label><br>
+        <select class="statusSelect">
+          ${statuses.map(([value,label]) =>
+            `<option value="${value}" ${order.status===value?"selected":""}>${label}</option>`
+          ).join("")}
+        </select>
+        <button class="saveBtn">Сабт кардани ҳолат</button>
+        <p class="itemDetails muted">Маҳсулот бор шуда истодаанд...</p>
+      `;
+
+      $("orders").appendChild(card);
+
+      card.querySelector(".saveBtn").addEventListener("click", async () => {
+        const newStatus = card.querySelector(".statusSelect").value;
+        const btn = card.querySelector(".saveBtn");
+        btn.disabled = true;
+
+        try {
+          const {error: updateError} = await db
+            .from("delivery_orders")
+            .update({status: newStatus})
+            .eq("id", order.id);
+
+          if (updateError) throw updateError;
+          card.querySelector("p:nth-of-type(6)").textContent =
+            "Ҳолат: " + newStatus;
+          $("message").textContent = "Ҳолат нав карда шуд.";
+        } catch (e) {
+          $("message").textContent = "Хато: " + e.message;
+        } finally {
+          btn.disabled = false;
+        }
+      });
+
+      const detail = card.querySelector(".itemDetails");
+      const {data: items, error: itemError} = await db
+        .from("order_items")
+        .select("item_name, quantity, unit_price")
+        .eq("order_id", order.id);
+
+      if (itemError) {
+        detail.textContent = "Маҳсулот хонда нашуд: " + itemError.message;
+      } else if (!items || items.length === 0) {
+        detail.textContent = "Рӯйхати маҳсулот нест.";
+      } else {
+        detail.textContent = "Маҳсулот: " + items.map(item =>
+          `${item.item_name} × ${item.quantity} — ${money(item.unit_price * item.quantity)}`
+        ).join("; ");
+      }
+    }
+  } catch (e) {
+    $("message").textContent = "Хато: " + e.message;
+  }
+}
+
+$("loginBtn").addEventListener("click", async () => {
+  $("loginMsg").textContent = "";
+  const email = $("email").value.trim();
+  const password = $("password").value;
+
+  const {error} = await db.auth.signInWithPassword({email, password});
+
+  if (error) {
+    $("loginMsg").textContent = "Ворид нашуд: " + error.message;
+    return;
+  }
+
+  try {
+    if (!await checkAdmin()) {
+      $("loginMsg").textContent = "Ба ҳисоб ворид шавед.";
+      return;
+    }
+    await loadOrders();
+  } catch (e) {
+    await db.auth.signOut();
+    $("dashboard").hidden = true;
+    $("loginBox").hidden = false;
+    $("loginMsg").textContent = e.message;
+  }
+});
+
+$("refreshBtn").addEventListener("click", loadOrders);
+
+$("logoutBtn").addEventListener("click", async () => {
+  await db.auth.signOut();
+  currentUser = null;
+  $("dashboard").hidden = true;
+  $("loginBox").hidden = false;
+  $("password").value = "";
+  $("loginMsg").textContent = "";
+});
+
+(async () => {
+  try {
+    if (await checkAdmin()) await loadOrders();
+  } catch (e) {
+    $("loginMsg").textContent = e.message;
+  }
+})();
+</script>
+</body>
+</html>
